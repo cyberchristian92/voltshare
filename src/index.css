@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --asphalt-950: #0b0b0d;
+  --asphalt-900: #131316;
+  --asphalt-800: #1a1a1f;
+  --road: #ffd21e;
+  --signal: #ff5a1f;
+  --volt: #22e0a1;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--asphalt-950);
+  color: #e9eaee;
+  font-family: 'Hanken Grotesk', system-ui, sans-serif;
+  font-feature-settings: 'ss01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Display: Archivo no eixo de largura expandido + peso pesado.
+   Degrada para peso forte caso o eixo de largura não esteja disponível. */
+.font-display {
+  font-variation-settings: 'wght' 800, 'wdth' 120;
+  font-weight: 800;
+}
+.font-display-mid {
+  font-variation-settings: 'wght' 600, 'wdth' 115;
+  font-weight: 600;
+}
+
+/* Tabular para todos os números de telemetria */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* ---------- Texturas de fundo ---------- */
+.grid-bg {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 22px 22px;
+  background-position: -1px -1px;
+}
+.scan-bg {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.018) 0px,
+    rgba(255, 255, 255, 0.018) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* faixa de pista tracejada (detalhe de marca) */
+.road-dash {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--road) 0 18px,
+    transparent 18px 34px
+  );
+}
+
+/* ---------- Reveal escalonado na entrada ---------- */
+@keyframes rvUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rv {
+  opacity: 0;
+  animation: rvUp 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rv {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ---------- Pulso "ao vivo" ---------- */
+@keyframes livePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 224, 161, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(34, 224, 161, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 224, 161, 0);
+  }
+}
+.live-dot {
+  animation: livePulse 1.8s ease-out infinite;
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+.blink {
+  animation: blink 1.6s steps(2, end) infinite;
+}
+
+/* barra de voto/captação cresce ao entrar */
+@keyframes growX {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.grow-x {
+  transform-origin: left center;
+  animation: growX 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+/* desenho da linha do gráfico */
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ---------- Scrollbar técnica ---------- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--asphalt-950);
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a31;
+  border: 2px solid var(--asphalt-950);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a43;
+}
+
+/* foco visível acessível */
+:focus-visible {
+  outline: 2px solid var(--road);
+  outline-offset: 2px;
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: rgba(255, 210, 30, 0.28);
+}
