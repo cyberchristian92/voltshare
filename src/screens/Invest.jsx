@@ -104,7 +104,7 @@ function CaptacaoCard({ hub, active, onSelect }) {
         <Meter value={cap.captado} total={c.meta} metaLabel={`${num(cap.disponiveis)} cotas livres`} height={12} />
       </div>
 
-      <div className="mt-3.5 grid grid-cols-4 gap-2 border-t border-line pt-3">
+      <div className="mt-3.5 grid grid-cols-2 gap-2 border-t border-line pt-3 sm:grid-cols-4">
         <Mini label="Usina" v={hub.usinaLabel.replace(' (proj.)', '')} />
         <Mini label="Carregadores" v={`${hub.carregadores.qtd}×${kw(hub.carregadores.kw)}`} />
         <Mini label="Cota" v={brl(c.preco, 0)} />

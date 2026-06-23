@@ -85,12 +85,12 @@ export function StatusChip({ status, className = '' }) {
 export function Panel({ title, kicker, right, children, className = '', accent = false, pad = true }) {
   return (
     <section
-      className={`relative border border-line bg-asphalt-900 ${accent ? 'shadow-[inset_3px_0_0_0_#FFD21E]' : ''} ${className}`}
+      className={`relative overflow-hidden transition-all duration-300 hover:shadow-2xl ${accent ? 'glass-accent' : 'glass-panel'} ${className}`}
     >
       {/* canto técnico */}
-      <span className="pointer-events-none absolute right-0 top-0 h-2.5 w-2.5 border-r border-t border-road/40" />
+      <span className="pointer-events-none absolute right-0 top-0 z-10 h-2.5 w-2.5 border-r border-t border-road/40" />
       {(title || right) && (
-        <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
+        <header className="relative z-10 flex items-center justify-between gap-3 border-b border-line/40 px-4 py-3">
           <div className="min-w-0">
             {kicker && <div className="mb-0.5"><KLabel>{kicker}</KLabel></div>}
             {title && (

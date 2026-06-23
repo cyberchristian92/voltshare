@@ -7,6 +7,8 @@ import {
   Landmark,
   Activity,
   Leaf,
+  Menu,
+  X
 } from 'lucide-react'
 import { Wordmark, Hairline, RoadDash, LiveDot, KLabel } from './ui.jsx'
 import { Toaster } from './ui.jsx'
@@ -46,6 +48,7 @@ const SCREENS = {
 export default function App() {
   const [screen, setScreen] = useState('overview')
   const [assetFocus, setAssetFocus] = useState(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { state, dismissToast, cotasTotais } = useStore()
   const Screen = SCREENS[screen]
   const meta = NAV.find((n) => n.id === screen)
@@ -53,16 +56,32 @@ export default function App() {
   const go = (id, focus = null) => {
     setScreen(id)
     if (focus) setAssetFocus(focus)
+    setMobileMenuOpen(false)
     const main = document.getElementById('main-scroll')
     if (main) main.scrollTop = 0
   }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-asphalt-950 text-concrete-200">
+    <div className="flex h-[100dvh] w-screen overflow-hidden bg-asphalt-950 text-concrete-200">
+      {/* ───────── Overlay Mobile ───────── */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden" 
+          onClick={() => setMobileMenuOpen(false)} 
+        />
+      )}
+
       {/* ───────── Sidebar ───────── */}
-      <aside className="flex w-[230px] shrink-0 flex-col border-r border-line bg-asphalt-900">
-        <div className="px-5 pb-4 pt-5">
+      <aside 
+        className={`glass-nav fixed inset-y-0 left-0 z-50 flex w-[260px] transform flex-col border-r border-line transition-transform duration-300 ease-in-out md:static md:w-[230px] md:translate-x-0 md:bg-asphalt-900 ${
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="flex items-center justify-between px-5 pb-4 pt-5">
           <Wordmark />
+          <button className="text-concrete-400 hover:text-white md:hidden" onClick={() => setMobileMenuOpen(false)}>
+            <X size={20} />
+          </button>
         </div>
         <RoadDash />
         <nav className="flex-1 overflow-y-auto px-3 py-4">
@@ -122,20 +141,25 @@ export default function App() {
       {/* ───────── Coluna principal ───────── */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Top bar */}
-        <header className="flex shrink-0 items-center justify-between border-b border-line bg-asphalt-900/80 px-6 py-3.5 backdrop-blur">
-          <div>
-            <div className="flex items-center gap-2.5">
-              <span className="font-mono text-[10px] text-concrete-400">{meta.n}</span>
-              <h1 className="font-display text-[19px] uppercase tracking-tightest text-concrete-100">
-                {meta.label}
-              </h1>
-              {meta.star && (
-                <span className="border border-road/40 bg-road/[0.08] px-1.5 py-px font-mono text-[8.5px] uppercase tracking-wider text-road">
-                  principal
-                </span>
-              )}
+        <header className="glass-nav flex shrink-0 items-center justify-between border-b border-line px-4 py-3.5 md:px-6">
+          <div className="flex items-center gap-3">
+            <button className="text-concrete-300 hover:text-concrete-100 md:hidden" onClick={() => setMobileMenuOpen(true)}>
+              <Menu size={22} />
+            </button>
+            <div>
+              <div className="flex items-center gap-2.5">
+                <span className="hidden font-mono text-[10px] text-concrete-400 sm:inline">{meta.n}</span>
+                <h1 className="font-display text-[17px] sm:text-[19px] uppercase tracking-tightest text-concrete-100">
+                  {meta.label}
+                </h1>
+                {meta.star && (
+                  <span className="hidden border border-road/40 bg-road/[0.08] px-1.5 py-px font-mono text-[8.5px] uppercase tracking-wider text-road sm:inline">
+                    principal
+                  </span>
+                )}
+              </div>
+              <p className="mt-0.5 hidden text-[11.5px] text-concrete-400 sm:block">{meta.desc}</p>
             </div>
-            <p className="mt-0.5 text-[11.5px] text-concrete-400">{meta.desc}</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="hidden items-center gap-2 border border-line bg-asphalt-950 px-2.5 py-1.5 md:flex">
@@ -147,8 +171,8 @@ export default function App() {
         </header>
 
         {/* Conteúdo */}
-        <main id="main-scroll" className="grid-bg relative flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-[1320px] px-6 py-6">
+        <main id="main-scroll" className="grid-bg relative flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="mx-auto max-w-[1320px] p-4 sm:p-6">
             <Screen go={go} assetFocus={assetFocus} setAssetFocus={setAssetFocus} key={screen} />
           </div>
         </main>
